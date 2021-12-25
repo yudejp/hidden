@@ -1,0 +1,5 @@
+server {
+    listen 7658;
+    root /var/www/hidden/html;
+    index index.html;
+}
