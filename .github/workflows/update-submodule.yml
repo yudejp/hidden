@@ -26,5 +26,5 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "action@github.com"
-          git commit -am "Update submodules @ $(date "%Y/%m/%d %H:%M:%S")"
+          git commit -am "Update submodules @ $(date "+%Y/%m/%d %H:%M:%S")"
           git push
