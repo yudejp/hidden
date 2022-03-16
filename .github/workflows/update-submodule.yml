@@ -8,32 +8,23 @@ on:
       - main
 
 jobs:
-  update_submodules:
-    name: Update submodules
-    runs-on: ubuntu-18.04
+  # This workflow contains a single job called "update"
+  update:
+    runs-on: ubuntu-latest
     env:
       TZ: "Asia/Tokyo"
-    if: contains(github.event.head_commit.message, '[ci skip]') == false
+
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
-    - name: Update submodules
-      id: update
-      run: git submodule update --remote --recursive 
-    - name: Run git status
-      id: status
-      run: echo "::set-output name=status::$(git status -s)"
-    - name: Add and commit files
-      run: |
-        git add .
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git commit -m "Update submodules at $(date "+DATE: %Y-%m-%d TIME: %H:%M:%S")"
-      if: ${{ steps.status.outputs.status }}
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
-      if: ${{ steps.status.outputs.status && github.event_name == 'push' }}
+      - uses: actions/checkout@v2
+
+      - name: Pull & update submodules recursively
+        run: |
+          git submodule update --init --recursive
+          git submodule update --recursive --remote
+
+      - name: Commit & push changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "action@github.com"
+          git commit -am "Update submodules @ $(date "%Y/%m/%d %H:%M:%S")"
+          git push
