@@ -1,0 +1,4 @@
+[submodule "html"]
+	path = html
+	url = https://github.com/yudejp/yude.jp
+	branch = gh-pages
